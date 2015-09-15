@@ -1,0 +1,15 @@
+var should = require('should');
+var request = require('request');
+
+describe('Test External Service',function(){
+var url = 'http://localhost:2345';
+	describe('Authenticate test',function(){
+		url = url+'/authenticate?name=vineeth&password=vineeth@123';
+		it('should validate authenticate response',function(done){
+			request(url,function(error,response,body){
+				body.should.equal('failure');
+				done();
+			});	
+		});
+	});
+});

@@ -1,0 +1,55 @@
+var should = require('should');
+var request = require('request');
+var io = require('socket.io-client');
+var socketURL = 'http://0.0.0.0:1234';
+var options ={
+  transports: ['websocket'],
+  'forceNew': true
+};
+var client = io.connect(socketURL,options);
+var data_driven = require('data-driven');
+
+describe('socket Interaction test' , function(){
+	
+	describe('handshake test',function(){
+	it('should check if handshake is proper',function(done){
+		//var client = io.connect(socketURL,options);
+		client.on('connect',function(data){
+			client.emit('handshake',{});
+		});
+		client.on('handshakeResponse',function(response){
+			response.response.should.equal('success');
+			done();
+		});
+	});
+
+	});
+
+	describe('login Test',function(){
+		it('User Login Test',function(done){
+			client = io.connect(socketURL,options);
+			client.emit('userAuthentication',{name:'vineeth',password:'password'});
+			client.on('userAuthenticationResponse',function(response){
+				console.log('Resp'+response.status);
+				response.status.should.equal('success');
+				done();
+			});
+		});
+	});
+		
+			
+});
+/*
+describe('Test External Service',function(){
+var url = 'http://localhost:2345';
+	describe('Authenticate test',function(){
+		url = url+'/authenticate?name=vineeth&password=vineeth@123';
+		it('should validate authenticate response',function(done){
+			request(url,function(error,response,body){
+				body.should.equal('failure');
+				done();
+			});	
+		});
+	});
+});
+*/

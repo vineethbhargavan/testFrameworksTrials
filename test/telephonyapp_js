@@ -1,0 +1,80 @@
+var should = require('should');
+var request = require('request');
+var io = require('socket.io-client');
+var socketURL = 'http://0.0.0.0:1234';
+var options ={
+  transports: ['websocket'],
+  'forceNew': true
+};
+//var client = io.connect(socketURL,options);
+var data_driven = require('data-driven');
+
+describe('socket Interaction test' , function(){
+	/*
+	describe('handshake test',function(){
+	it('should check if handshake is proper',function(done){
+		//var client = io.connect(socketURL,options);
+		client.on('connect',function(data){
+			client.emit('handshake',{});
+		});
+		client.on('handshakeResponse',function(response){
+			response.response.should.equal('success');
+			done();
+		});
+	});
+
+	});
+*/
+	describe('login Test',function(){
+	//data_driven([{name: 'vineeth', password: 'vineeth@123', expected: 'failure'},{name: 'vineeth', password: 'password', expected: 'success'},{name: 'vineeth', password: 'vineeth@123', expected: 'failure'},{name: 'vineeth', password: 'password', expected: 'success'}], function() {
+	for(var i =0 ; i<5; i++){
+		(function(){
+		it('User Login Test',function(done){
+			//console.log('Inputs'+ ctx.password);
+			//for(var i =0 ; i <40 ; i++){
+			//idone();
+			var client = io.connect(socketURL,options);
+			(function(){
+			client.emit('userAuthentication',{'name':'ctx.name','password':'password'},function(){
+			//done();
+			client.on('userAuthenticationResponse',function(response){
+				console.log('Resp'+response.status);
+				response.status.should.equal('success');
+				done();
+			});
+			//done();
+			});
+			done();
+			})();
+			done();
+		});
+	})();
+	}
+		
+			
+	});
+});
+/*
+function processLogin(i){
+                it('User Login Test'+i,function(i){
+                        client.emit('userAuthentication',{name:'vineeth',password:'vineeth@123'});
+                        client.on('userAuthenticationResponse',function(response){
+                               response.status.should.equal('success');
+                            i(i);
+			});
+		});
+}*/
+/*
+describe('Test External Service',function(){
+var url = 'http://localhost:2345';
+	describe('Authenticate test',function(){
+		url = url+'/authenticate?name=vineeth&password=vineeth@123';
+		it('should validate authenticate response',function(done){
+			request(url,function(error,response,body){
+				body.should.equal('failure');
+				done();
+			});	
+		});
+	});
+});
+*/
